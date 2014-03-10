@@ -26,6 +26,13 @@ public class ServoModel {
         this.current = min;
         this.name = name;
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
+    
+    
     
     public void setCurrent(int val) {
         this.current = val;

@@ -7,6 +7,9 @@
 package gui;
 
 import control.ServoControl;
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
 import model.ServoModel;
 
 /**
@@ -15,7 +18,7 @@ import model.ServoModel;
  */
 public class Servo extends javax.swing.JPanel {
 
-    private ServoModel modelData;
+    private ServoModel modelData[];
     /**
      * Creates new form Servo
      */
@@ -23,18 +26,13 @@ public class Servo extends javax.swing.JPanel {
         initComponents();
     }
     boolean done = false;
-    public void setServoModel(ServoModel model) {
+    public void setServoModel(ServoModel[] model) {
         modelData = model;
-        ServoNameLabel.setText(modelData.getName());
-        ServoSlider.setMinimum(modelData.getMin());
-        ServoSlider.setMaximum(modelData.getMax());
-        ServoSlider.setValue(modelData.getCurrent());
-        System.out.println("Current" + modelData.getCurrent());
-        labelServoVal.setText(String.valueOf(modelData.getCurrent()));
-        ServoSlider.setMajorTickSpacing(5);
-        ServoSlider.updateUI();
-        ServoSlider.repaint();
-        done = true;
+        
+        servoList.setModel(new DefaultComboBoxModel(model));
+        
+        
+        
         
     }
 
@@ -49,7 +47,6 @@ public class Servo extends javax.swing.JPanel {
 
         jCheckBox1 = new javax.swing.JCheckBox();
         ServoSlider = new javax.swing.JSlider();
-        ServoNameLabel = new javax.swing.JLabel();
         labelServoVal = new javax.swing.JLabel();
         minCalibrated = new javax.swing.JCheckBox();
         jLabel1 = new javax.swing.JLabel();
@@ -57,6 +54,7 @@ public class Servo extends javax.swing.JPanel {
         minValField = new javax.swing.JLabel();
         maxValField = new javax.swing.JLabel();
         maxCalibrated = new javax.swing.JCheckBox();
+        servoList = new javax.swing.JComboBox();
 
         jCheckBox1.setText("jCheckBox1");
 
@@ -69,8 +67,6 @@ public class Servo extends javax.swing.JPanel {
                 ServoSliderStateChanged(evt);
             }
         });
-
-        ServoNameLabel.setText("Left Elbow");
 
         labelServoVal.setText(String.valueOf(ServoSlider.getValue()));
 
@@ -86,16 +82,23 @@ public class Servo extends javax.swing.JPanel {
 
         maxCalibrated.setText("Calibrated");
 
+        servoList.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        servoList.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                servoListActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(ServoNameLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(servoList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(ServoSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(labelServoVal)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -107,7 +110,7 @@ public class Servo extends javax.swing.JPanel {
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(maxValField)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(minCalibrated)
                     .addComponent(maxCalibrated))
@@ -116,25 +119,27 @@ public class Servo extends javax.swing.JPanel {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(ServoNameLabel)
-                    .addComponent(labelServoVal))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(minValField)
+                    .addComponent(minCalibrated))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(maxValField)
+                    .addComponent(maxCalibrated))
+                .addGap(0, 19, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(ServoSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel1)
-                            .addComponent(minValField)
-                            .addComponent(minCalibrated))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel2)
-                            .addComponent(maxValField)
-                            .addComponent(maxCalibrated))))
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(servoList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(19, 19, 19)
+                            .addComponent(labelServoVal))
+                        .addGroup(layout.createSequentialGroup()
+                            .addContainerGap()
+                            .addComponent(ServoSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -145,17 +150,33 @@ public class Servo extends javax.swing.JPanel {
             //modelData.setCurrent(ServoSlider.getValue());
             //labelServoVal.setText(String.valueOf(ServoSlider.getValue()));
             int val = ServoSlider.getValue();
-            modelData.setCurrent(val);
+            ((ServoModel) servoList.getSelectedItem()).setCurrent(val);
             labelServoVal.setText(String.valueOf(val));
-            System.out.println(modelData.getCurrent());
+            System.out.println(((ServoModel) servoList.getSelectedItem()).getCurrent());
             
-            ServoControl.getServoControl().setServo(modelData);
+            ServoControl.getServoControl().setServo(((ServoModel) servoList.getSelectedItem()));
         }
     }//GEN-LAST:event_ServoSliderStateChanged
 
+    private void servoListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_servoListActionPerformed
+        // TODO add your handling code here:
+        if (modelData != null) {
+            ServoModel selected = (ServoModel) servoList.getSelectedItem();
+            ServoSlider.setMinimum(selected.getMin());
+            ServoSlider.setMaximum(selected.getMax());
+            ServoSlider.setValue(selected.getCurrent());
+            System.out.println("Current" + selected.getCurrent());
+            labelServoVal.setText(String.valueOf(selected.getCurrent()));
+            ServoSlider.setMajorTickSpacing(5);
+            ServoSlider.updateUI();
+            ServoSlider.repaint();
+            done = true;
+        }
+        
+    }//GEN-LAST:event_servoListActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel ServoNameLabel;
     private javax.swing.JSlider ServoSlider;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel1;
@@ -165,5 +186,6 @@ public class Servo extends javax.swing.JPanel {
     private javax.swing.JLabel maxValField;
     private javax.swing.JCheckBox minCalibrated;
     private javax.swing.JLabel minValField;
+    private javax.swing.JComboBox servoList;
     // End of variables declaration//GEN-END:variables
 }

@@ -116,7 +116,12 @@ public class ServoControl {
         
         System.out.println(sb.toString());
         data = gson.fromJson(sb.toString(), ServoModel[].class);
-        System.out.println(data[0].getCurrent());
+        
+        for (int i = 0; i < data.length; i++) {
+            data[i].setIndex(i+1);
+        }
+        
+        
         return data;
     }
     
