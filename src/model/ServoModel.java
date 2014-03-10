@@ -16,9 +16,11 @@ public class ServoModel {
     private double current;
     private String name;
     private int index;
+    private double hardness;
     public ServoModel() {
         min = -180;
         max = 180;
+        hardness = 0;
     }
     public ServoModel(int min, int max, String name) {
         this.min = min;
@@ -72,6 +74,14 @@ public class ServoModel {
 
     public void setIndex(int index) {
         this.index = index;
+    }
+
+    public double getHardness() {
+        return hardness;
+    }
+
+    public void setHardness(double hardness) {
+        this.hardness = hardness;
     }
     
     

@@ -81,7 +81,18 @@ public class ServoControl {
 
         public GetServos() {
         }
-        
+    }
+    class SetServoHardness {
+        String action = "setServoHardness";
+        ServoModel args;
+    }
+    public void setServoHardness(ServoModel model) {
+        SetServoHardness sshard = new SetServoHardness();
+        sshard.args = model;
+        String out = gson.toJson(sshard);
+        pw.println(out);
+        pw.flush();
+        System.out.println("Set servo hardness");
     }
     
     public void setServo(ServoModel model) {
@@ -98,8 +109,10 @@ public class ServoControl {
         
         //jw.beginObject().name("action").value("getServos").name("args").value("").endObject().flush();
         String j = gson.toJson(new GetServos());
+        
         System.out.println(j);
         System.out.flush();
+        
         pw.println(j);
         pw.flush();
         System.out.println("Sent " + j);
