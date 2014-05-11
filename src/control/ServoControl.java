@@ -12,6 +12,7 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -37,6 +38,7 @@ public class ServoControl {
     private Reader reader;
     private PushbackReader pr;
     private PrintWriter pw;
+    DataOutputStream outd;
     private Gson gson = new Gson();
     private boolean isConnected = false;
     private ServoModel data[];
@@ -60,6 +62,7 @@ public class ServoControl {
         sock = new Socket();
         sock.connect(new InetSocketAddress(ip, port), 3000);
         pw = new PrintWriter(sock.getOutputStream(), true);
+        outd = new DataOutputStream(sock.getOutputStream());
         jw = new JsonWriter(pw);
         reader = new InputStreamReader(sock.getInputStream());
         pr = new PushbackReader(reader);
@@ -108,15 +111,16 @@ public class ServoControl {
     public ServoModel[] getServos() throws IOException {
         
         //jw.beginObject().name("action").value("getServos").name("args").value("").endObject().flush();
-        String j = gson.toJson(new GetServos());
+        String j = gson.toJson(new GetServos())+"\n";
         
         System.out.println(j);
         System.out.flush();
-        
-        pw.println(j);
-        pw.flush();
+        outd.write(j.getBytes());
+        outd.flush();
+        //pw.println(j);
+        //pw.flush();
         System.out.println("Sent " + j);
-        // really should be in a seprate thead with a callback but i'm lazy...
+        
         pr.unread(pr.read());
         
         char buff[] = new char[100];
